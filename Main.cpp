@@ -1,10 +1,11 @@
 #define NOMINMAX
 
+#include <iostream>
 #include <filesystem>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <DirectXTex.h>
 
-#include "tegra_swizzle.hpp"
 #include "Nutexb.hpp"
 #include "BNTX.hpp"
 #include "Constants.hpp"
@@ -29,7 +30,7 @@ cv::Mat CreateRender(cv::Mat& skin, bool model) {
 		cv::Mat leftarmfront = CropAndScale(skin, cv::Rect(36, 52, 3, 12));
 		cv::Mat layerrightarmfront = CropAndScale(skin, cv::Rect(44, 36, 3, 12));
 		cv::Mat layerleftarmfront = CropAndScale(skin, cv::Rect(52, 52, 3, 12));
-		
+
 		cv::Mat rightarmside = CropAndScale(skin, cv::Rect(40, 20, 4, 12));
 		cv::Mat leftarmside = CropAndScale(skin, cv::Rect(32, 52, 4, 12));
 		cv::Mat layerrightarmside = CropAndScale(skin, cv::Rect(40, 36, 4, 12));
@@ -47,42 +48,42 @@ cv::Mat CreateRender(cv::Mat& skin, bool model) {
 		cv::Mat layerrightlegfront = CropAndScale(skin, cv::Rect(4, 36, 4, 12));
 		cv::Mat layerleftlegfront = CropAndScale(skin, cv::Rect(4, 52, 4, 12));
 
-		rightarmfront = RenderPerspectiveTransformation(168, 512, 376, 530, 345, 1200, 136, 1196, PartSize::SIZE_4_12, rightarmfront);
-		rightarmside = RenderPerspectiveTransformation(98, 521, 168, 512, 136, 1196, 68, 1175, PartSize::SIZE_4_12, rightarmside);
+		RenderPerspectiveTransformation(168, 512, 376, 530, 345, 1200, 136, 1196, PartSize::Size4x12, rightarmfront);
+		RenderPerspectiveTransformation(98, 521, 168, 512, 136, 1196, 68, 1175, PartSize::Size4x12, rightarmside);
 
-		leftarmfront = RenderPerspectiveTransformation(725, 532, 915, 525, 936, 1160, 749, 1177, PartSize::SIZE_4_12, leftarmfront);
-		leftarmside = RenderPerspectiveTransformation(627, 544, 725, 532, 749, 1177, 651, 1143, PartSize::SIZE_4_12, leftarmside);
+		RenderPerspectiveTransformation(725, 532, 915, 525, 936, 1160, 749, 1177, PartSize::Size4x12, leftarmfront);
+		RenderPerspectiveTransformation(627, 544, 725, 532, 749, 1177, 651, 1143, PartSize::Size4x12, leftarmside);
 
-		layerrightarmfront = RenderPerspectiveTransformation(158, 498, 339, 511, 310, 1215, 128, 1217, PartSize::SIZE_4_12, layerrightarmfront);
-		layerrightarmside = RenderPerspectiveTransformation(75, 509, 158, 498, 128, 1217, 49, 1183, PartSize::SIZE_4_12, layerrightarmside);
+		RenderPerspectiveTransformation(158, 498, 339, 511, 310, 1215, 128, 1217, PartSize::Size4x12, layerrightarmfront);
+		RenderPerspectiveTransformation(75, 509, 158, 498, 128, 1217, 49, 1183, PartSize::Size4x12, layerrightarmside);
 
-		layerleftarmfront = RenderPerspectiveTransformation(717, 521, 878, 514, 899, 1175, 742, 1196, PartSize::SIZE_4_12, layerleftarmfront);
-		layerleftarmside = RenderPerspectiveTransformation(611, 570, 717, 521, 742, 1196, 630, 1155, PartSize::SIZE_4_12, layerleftarmside);
+		RenderPerspectiveTransformation(717, 521, 878, 514, 899, 1175, 742, 1196, PartSize::Size4x12, layerleftarmfront);
+		RenderPerspectiveTransformation(611, 570, 717, 521, 742, 1196, 630, 1155, PartSize::Size4x12, layerleftarmside);
 
-		headfront = RenderPerspectiveTransformation(366, 59, 776, 86, 774, 529, 368, 521, PartSize::HEAD, headfront);
-		headside = RenderPerspectiveTransformation(210, 119, 366, 59, 368, 521, 212, 537, PartSize::HEAD, headside);
-		headbottom = RenderPerspectiveTransformation(366, 520, 774, 529, 591, 537, 212, 537, PartSize::HEAD, headbottom);
+		RenderPerspectiveTransformation(366, 59, 776, 86, 774, 529, 368, 521, PartSize::Head, headfront);
+		RenderPerspectiveTransformation(210, 119, 366, 59, 368, 521, 212, 537, PartSize::Head, headside);
+		RenderPerspectiveTransformation(366, 520, 774, 529, 591, 537, 212, 537, PartSize::Head, headbottom);
 
-		rightlegfront = RenderPerspectiveTransformation(327, 1194, 528, 1184, 519, 1825, 320, 1846, PartSize::SIZE_4_12, rightlegfront);
-		rightlegside = RenderPerspectiveTransformation(249, 1161, 327, 1194, 320, 1846, 244, 1793, PartSize::SIZE_4_12, rightlegside);
-		leftlegfront = RenderPerspectiveTransformation(528, 1184, 722, 1175, 720, 1801, 529, 1824, PartSize::SIZE_4_12, leftlegfront);
+		RenderPerspectiveTransformation(327, 1194, 528, 1184, 519, 1825, 320, 1846, PartSize::Size4x12, rightlegfront);
+		RenderPerspectiveTransformation(249, 1161, 327, 1194, 320, 1846, 244, 1793, PartSize::Size4x12, rightlegside);
+		RenderPerspectiveTransformation(528, 1184, 722, 1175, 720, 1801, 529, 1824, PartSize::Size4x12, leftlegfront);
 
-		bodyfront = RenderPerspectiveTransformation(325, 526, 725, 532, 722, 1175, 326, 1194, PartSize::BODY, bodyfront);
-		bodyside = RenderPerspectiveTransformation(252, 534, 325, 526, 326, 1196, 249, 1167, PartSize::SIZE_4_12, bodyside);
+		RenderPerspectiveTransformation(325, 526, 725, 532, 722, 1175, 326, 1194, PartSize::Body, bodyfront);
+		RenderPerspectiveTransformation(252, 534, 325, 526, 326, 1196, 249, 1167, PartSize::Size4x12, bodyside);
 
-		layerrightlegfront = RenderPerspectiveTransformation(319, 1192, 542, 1173, 524, 1847, 311, 1864, PartSize::SIZE_4_12, layerrightlegfront);
-		layerrightlegside = RenderPerspectiveTransformation(239, 1183, 319, 1192, 311, 1864, 234, 1799, PartSize::SIZE_4_12, layerrightlegside);
-		layerleftlegfront = RenderPerspectiveTransformation(514, 1175, 741, 1157, 740, 1820, 524, 1847, PartSize::SIZE_4_12, layerleftlegfront);
+		RenderPerspectiveTransformation(319, 1192, 542, 1173, 524, 1847, 311, 1864, PartSize::Size4x12, layerrightlegfront);
+		RenderPerspectiveTransformation(239, 1183, 319, 1192, 311, 1864, 234, 1799, PartSize::Size4x12, layerrightlegside);
+		RenderPerspectiveTransformation(514, 1175, 741, 1157, 740, 1820, 524, 1847, PartSize::Size4x12, layerleftlegfront);
 
-		layerheadfront = RenderPerspectiveTransformation(350, 23, 813, 56, 813, 548, 352, 547, PartSize::HEAD, layerheadfront);
-		layerheadside = RenderPerspectiveTransformation(176, 94, 350, 23, 352, 547, 178, 564, PartSize::HEAD, layerheadside);
+		RenderPerspectiveTransformation(350, 23, 813, 56, 813, 548, 352, 547, PartSize::Head, layerheadfront);
+		RenderPerspectiveTransformation(176, 94, 350, 23, 352, 547, 178, 564, PartSize::Head, layerheadside);
 
-		layerbodyfront = RenderPerspectiveTransformation(318, 504, 743, 512, 742, 1175, 323, 1196, PartSize::BODY, layerbodyfront);
-		layerbodyside = RenderPerspectiveTransformation(241, 515, 318, 504, 323, 1196, 244, 1166, PartSize::SIZE_4_12, layerbodyside);
+		RenderPerspectiveTransformation(318, 504, 743, 512, 742, 1175, 323, 1196, PartSize::Body, layerbodyfront);
+		RenderPerspectiveTransformation(241, 515, 318, 504, 323, 1196, 244, 1166, PartSize::Size4x12, layerbodyside);
 
 		cv::Mat SURFACE(1864, 968, CV_8UC4);
-		memset(SURFACE.data, 0, 1864 * 968 * 4); // i really dont know why tf i do this
-		
+		SURFACE.setTo(0);
+
 		AdjustBrightness(bodyside, 0.2);
 		AdjustBrightness(leftarmside, 0.3);
 
@@ -96,7 +97,7 @@ cv::Mat CreateRender(cv::Mat& skin, bool model) {
 		AdjustBrightness(layerrightarmside, 0.6);
 		AdjustBrightness(layerrightlegside, 0.4);
 		AdjustBrightness(layerheadside, 0.6);
-		
+
 		OverlayImage(SURFACE, leftarmside, cv::Point(0, 0));
 
 		OverlayImage(SURFACE, headbottom, cv::Point(0, 0));
@@ -178,41 +179,41 @@ cv::Mat CreateRender(cv::Mat& skin, bool model) {
 		cv::Mat layerrightlegfront = CropAndScale(skin, cv::Rect(4, 36, 4, 12));
 		cv::Mat layerleftlegfront = CropAndScale(skin, cv::Rect(4, 52, 4, 12));
 
-		rightarmfront = RenderPerspectiveTransformation(120, 512, 328, 526, 305, 1194, 94, 1194, PartSize::SIZE_4_12, rightarmfront);
-		rightarmside = RenderPerspectiveTransformation(51, 522, 120, 512, 94, 1194, 26, 1172, PartSize::SIZE_4_12, rightarmside);
+		RenderPerspectiveTransformation(120, 512, 328, 526, 305, 1194, 94, 1194, PartSize::Size4x12, rightarmfront);
+		RenderPerspectiveTransformation(51, 522, 120, 512, 94, 1194, 26, 1172, PartSize::Size4x12, rightarmside);
 
-		leftarmfront = RenderPerspectiveTransformation(716, 532, 902, 527, 924, 1162, 740, 1170, PartSize::SIZE_4_12, leftarmfront);
-		leftarmside = RenderPerspectiveTransformation(627, 534, 715, 500, 740, 1171, 651, 1143, PartSize::SIZE_4_12, leftarmside);
+		RenderPerspectiveTransformation(716, 532, 902, 527, 924, 1162, 740, 1170, PartSize::Size4x12, leftarmfront);
+		RenderPerspectiveTransformation(627, 534, 715, 500, 740, 1171, 651, 1143, PartSize::Size4x12, leftarmside);
 
-		layerrightarmfront = RenderPerspectiveTransformation(119, 496, 346, 513, 325, 1211, 92, 1213, PartSize::SIZE_4_12, layerrightarmfront);
-		layerrightarmside = RenderPerspectiveTransformation(34, 506, 119, 496, 92, 1213, 9, 1183, PartSize::SIZE_4_12, layerrightarmside);
+		RenderPerspectiveTransformation(119, 496, 346, 513, 325, 1211, 92, 1213, PartSize::Size4x12, layerrightarmfront);
+		RenderPerspectiveTransformation(34, 506, 119, 496, 92, 1213, 9, 1183, PartSize::Size4x12, layerrightarmside);
 
-		layerleftarmfront = RenderPerspectiveTransformation(709, 523, 919, 510, 944, 1163, 735, 1187, PartSize::SIZE_4_12, layerleftarmfront);
-		layerleftarmside = RenderPerspectiveTransformation(611, 563, 709, 523, 735, 1187, 635, 1165, PartSize::SIZE_4_12, layerleftarmside);
+		RenderPerspectiveTransformation(709, 523, 919, 510, 944, 1163, 735, 1187, PartSize::Size4x12, layerleftarmfront);
+		RenderPerspectiveTransformation(611, 563, 709, 523, 735, 1187, 635, 1165, PartSize::Size4x12, layerleftarmside);
 
-		headfront = RenderPerspectiveTransformation(366, 59, 776, 86, 774, 529, 368, 521, PartSize::HEAD, headfront);
-		headside = RenderPerspectiveTransformation(210, 119, 366, 59, 368, 521, 212, 537, PartSize::HEAD, headside);
-		headbottom = RenderPerspectiveTransformation(366, 520, 774, 529, 591, 537, 212, 537, PartSize::HEAD, headbottom);
+		RenderPerspectiveTransformation(366, 59, 776, 86, 774, 529, 368, 521, PartSize::Head, headfront);
+		RenderPerspectiveTransformation(210, 119, 366, 59, 368, 521, 212, 537, PartSize::Head, headside);
+		RenderPerspectiveTransformation(366, 520, 774, 529, 591, 537, 212, 537, PartSize::Head, headbottom);
 
-		rightlegfront = RenderPerspectiveTransformation(327, 1194, 528, 1184, 519, 1825, 320, 1846, PartSize::SIZE_4_12, rightlegfront);
-		rightlegside = RenderPerspectiveTransformation(249, 1161, 327, 1194, 320, 1846, 244, 1793, PartSize::SIZE_4_12, rightlegside);
-		leftlegfront = RenderPerspectiveTransformation(528, 1184, 722, 1175, 720, 1801, 529, 1824, PartSize::SIZE_4_12, leftlegfront);
+		RenderPerspectiveTransformation(327, 1194, 528, 1184, 519, 1825, 320, 1846, PartSize::Size4x12, rightlegfront);
+		RenderPerspectiveTransformation(249, 1161, 327, 1194, 320, 1846, 244, 1793, PartSize::Size4x12, rightlegside);
+		RenderPerspectiveTransformation(528, 1184, 722, 1175, 720, 1801, 529, 1824, PartSize::Size4x12, leftlegfront);
 
-		bodyfront = RenderPerspectiveTransformation(325, 526, 725, 532, 722, 1175, 326, 1194, PartSize::BODY, bodyfront);
-		bodyside = RenderPerspectiveTransformation(252, 534, 325, 526, 326, 1196, 249, 1167, PartSize::SIZE_4_12, bodyside);
+		RenderPerspectiveTransformation(325, 526, 725, 532, 722, 1175, 326, 1194, PartSize::Body, bodyfront);
+		RenderPerspectiveTransformation(252, 534, 325, 526, 326, 1196, 249, 1167, PartSize::Size4x12, bodyside);
 
-		layerrightlegfront = RenderPerspectiveTransformation(319, 1192, 542, 1173, 524, 1847, 311, 1864, PartSize::SIZE_4_12, layerrightlegfront);
-		layerrightlegside = RenderPerspectiveTransformation(239, 1183, 319, 1192, 311, 1864, 234, 1799, PartSize::SIZE_4_12, layerrightlegside);
-		layerleftlegfront = RenderPerspectiveTransformation(514, 1175, 741, 1157, 740, 1820, 524, 1847, PartSize::SIZE_4_12, layerleftlegfront);
+		RenderPerspectiveTransformation(319, 1192, 542, 1173, 524, 1847, 311, 1864, PartSize::Size4x12, layerrightlegfront);
+		RenderPerspectiveTransformation(239, 1183, 319, 1192, 311, 1864, 234, 1799, PartSize::Size4x12, layerrightlegside);
+		RenderPerspectiveTransformation(514, 1175, 741, 1157, 740, 1820, 524, 1847, PartSize::Size4x12, layerleftlegfront);
 
-		layerheadfront = RenderPerspectiveTransformation(350, 23, 813, 56, 813, 548, 352, 547, PartSize::HEAD, layerheadfront);
-		layerheadside = RenderPerspectiveTransformation(176, 94, 350, 23, 352, 547, 178, 564, PartSize::HEAD, layerheadside);
+		RenderPerspectiveTransformation(350, 23, 813, 56, 813, 548, 352, 547, PartSize::Head, layerheadfront);
+		RenderPerspectiveTransformation(176, 94, 350, 23, 352, 547, 178, 564, PartSize::Head, layerheadside);
 
-		layerbodyfront = RenderPerspectiveTransformation(318, 504, 743, 512, 742, 1175, 323, 1196, PartSize::BODY, layerbodyfront);
-		layerbodyside = RenderPerspectiveTransformation(241, 515, 318, 504, 323, 1196, 244, 1166, PartSize::SIZE_4_12, layerbodyside);
+		RenderPerspectiveTransformation(318, 504, 743, 512, 742, 1175, 323, 1196, PartSize::Body, layerbodyfront);
+		RenderPerspectiveTransformation(241, 515, 318, 504, 323, 1196, 244, 1166, PartSize::Size4x12, layerbodyside);
 
 		cv::Mat SURFACE(1864, 968, CV_8UC4);
-		memset(SURFACE.data, 0, 1864 * 968 * 4); // i really dont know why tf i do this
+		SURFACE.setTo(0);
 
 		AdjustBrightness(bodyside, 0.2);
 		AdjustBrightness(leftarmside, 0.3);

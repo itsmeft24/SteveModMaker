@@ -1,10 +1,12 @@
 #pragma once
 
+#include <opencv2/opencv.hpp>
+
 enum class PartSize : int {
-	HEAD = 0,
-	SIZE_4_12 = 1,
-	SIZE_3_12 = 2,
-	BODY = 3,
+	Head = 0,
+	Size4x12 = 1,
+	Size3x12 = 2,
+	Body = 3,
 };
 
 enum class BodyType : int {
@@ -12,30 +14,30 @@ enum class BodyType : int {
 	ALEX = 3,
 };
 
-const static cv::Size CANVAS_SIZE(968, 1864);
+inline cv::Size CANVAS_SIZE(968, 1864);
 
-const static cv::Point2f HEAD_SIZE[4] = {
+inline cv::Point2f HEAD_SIZE[4] = {
 	{0.0, 0.0},
 	{800.0, 0.0},
 	{800.0, 800.0},
 	{0.0, 800.0}
 };
 
-const static cv::Point2f SIZE_4_12[4] = {
+inline cv::Point2f SIZE_4_12[4] = {
 	{0.0, 0.0},
 	{400.0, 0.0},
 	{400.0, 1200.0},
 	{0.0, 1200.0}
 };
 
-const static cv::Point2f SIZE_3_12[4] = {
+inline cv::Point2f SIZE_3_12[4] = {
 	{0.0, 0.0},
 	{300.0, 0.0},
 	{300.0, 1200.0},
 	{0.0, 1200.0}
 };
 
-const static cv::Point2f BODY_SIZE[4] = {
+inline cv::Point2f BODY_SIZE[4] = {
 	{0.0, 0.0},
 	{800.0, 0.0},
 	{800.0, 1200.0},
